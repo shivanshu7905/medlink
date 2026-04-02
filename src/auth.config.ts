@@ -5,8 +5,14 @@ export const authConfig = {
     signIn: "/login",
   },
   callbacks: {
-    authorized({ auth }) {
-      return !!auth;
+    authorized({ auth, request: { nextUrl } }) {
+      if (!auth) return false;
+      const role = (auth as any).user?.role;
+      if (nextUrl.pathname.startsWith("/doctor") && role !== "doctor")
+        return Response.redirect(new URL("/dashboard", nextUrl));
+      if (nextUrl.pathname.startsWith("/patient") && role !== "patient")
+        return Response.redirect(new URL("/dashboard", nextUrl));
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {

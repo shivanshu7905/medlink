@@ -29,7 +29,7 @@ export default function LoginPage() {
       router.push("/dashboard");
     } else {
       setSuccess(false);
-      setMessage("Invalid credentials");
+      setMessage("Invalid email or password");
     }
 
     setLoading(false);
